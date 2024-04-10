@@ -44,8 +44,12 @@ class Router
                 echo 'Класс ' . $path . ' существует';
                 $action = $this->params['action'] . 'Action';
                 if (method_exists($path, $action)){
+                    echo " тут1 ";
+                    //debug($this->params);
                     $controller = new $path($this->params);
+                    echo " тут2 ";
                     $controller->$action();
+                    echo " тут3 ";
                 }
                 else {
                     echo 'Метод ' . $action . ' в классе ' . $path . ' не найден';

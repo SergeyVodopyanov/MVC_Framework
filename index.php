@@ -4,7 +4,7 @@ require 'application/lib/Dev.php';
 
 use application\core\Router;
 
-echo "Привет";
+//echo "Привет";
 
 
 spl_autoload_register(function ($class) {
