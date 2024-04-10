@@ -39,11 +39,19 @@ class Router
     public function run() //запуск 
     {
         if ($this->match()){
-            $controller = 'application\controllers\\' . ucfirst($this->params['controller']) . 'Controller.php';
-            if (class_exists($controller)){
-                echo 'Класс ' . $controller . ' существует';
+            $path = 'application\controllers\\' . ucfirst($this->params['controller']) . 'Controller';
+            if (class_exists($path)){
+                echo 'Класс ' . $path . ' существует';
+                $action = $this->params['action'] . 'Action';
+                if (method_exists($path, $action)){
+                    $controller = new $path($this->params);
+                    $controller->$action();
+                }
+                else {
+                    echo 'Метод ' . $action . ' в классе ' . $path . ' не найден';
+                }
             } else{
-                echo 'Класс ' . $controller . ' не найден';
+                echo 'Класс ' . $path . ' не найден';
             }
 
 
