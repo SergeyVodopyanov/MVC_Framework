@@ -9,22 +9,49 @@ class Router
 
     public function __construct()
     {
-        echo 'я класс роутер';
+        $arr = require 'application/config/routes.php';
+        foreach ($arr as $key => $val){
+            $this->add($key, $val);
+        }
+        //debug($this->routes);
+        
     }
 
-    public function add() //добавление
+    public function add($route, $params) //добавление
     {
-        //
+        $route = '#^' . $route . '$#';
+        $this->routes[$route] = $params;
     }
 
     public function match() //проверка
     {
-        //
+        $url = trim($_SERVER['REQUEST_URI'], '/');
+        foreach ($this->routes as $route => $params){
+            if (preg_match($route, $url, $matches)){
+                $this->params = $params;
+                return true;
+            }
+        }
+        return false;
+
     }
 
     public function run() //запуск 
     {
-        echo 'start';
+        if ($this->match()){
+            $controller = 'application\controllers\\' . ucfirst($this->params['controller']) . 'Controller.php';
+            if (class_exists($controller)){
+                echo 'Класс ' . $controller . ' существует';
+            } else{
+                echo 'Класс ' . $controller . ' не найден';
+            }
+
+
+            //echo '<p>controller: <b>' . $this->params['controller'] . '</b><p>';
+            //echo '<p>action: <b>' . $this->params['action'] . '</b><p>';
+        } else{
+            echo 'Маршрут не найден';
+        }
     }
 
 }
